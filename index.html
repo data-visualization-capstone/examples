@@ -3,14 +3,24 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 	<script type="text/javascript" src="/js/xml.min.js"></script>
+
+	 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+	  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
 </head>
 <body>
 	<h1>Hello</h1>
+
 	<p id="data"></p>
+
+	 <div id="map" style="height: 280px;"></div>
+
 </body>
 	<script type="text/javascript">
 
 		console.log("Loading...");
+
+		var geoData = [];
 
 		$.ajax({
 		    url: "data/josh.xml",
@@ -50,17 +60,42 @@
 
 		    acc = _.zip(data.when, data["gx:coord"]);
 
-		    acc = _.map(acc, function(point, key){
+		    geoData = _.map(acc, function(point, key){
 		    	return {
 		    		"date"     : point[0].Text,
 		    		'location' : point[1].Text,
 		    	};
 		    })
 
+
 		    console.log('\n Resulting Formatted Data');
-		    console.log(acc);
+		    console.log(geoData[0]);
 
 		   	// $('#data').html(JSON.stringify(acc));
+
+			setupMap();
+		   	
+
+		}
+
+		
+
+		// http://leafletjs.com/examples/quick-start.html
+		function setupMap(){
+			var map = L.map('map').setView([42.342296, -71.0873438], 13);
+
+			L.tileLayer('http://{s}.tiles.mapbox.com/v3/alexjohnson505.k2pknn10/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		    maxZoom: 18
+			}).addTo(map);
+
+			addDataToMap();
+
+		}
+
+		function addDataToMap(){
+			// var marker = L.marker([51.5, -0.09]).addTo(map);
+
 		}
 
 	</script>

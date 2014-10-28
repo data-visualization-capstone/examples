@@ -20,8 +20,6 @@
 
 		console.log("Loading...");
 
-		var geoData = [];
-
 		$.ajax({
 		    url: "data/josh.xml",
 		    dataType:"xml"
@@ -60,42 +58,46 @@
 
 		    acc = _.zip(data.when, data["gx:coord"]);
 
-		    geoData = _.map(acc, function(point, key){
+		    acc = _.map(acc, function(point, key){
 		    	return {
 		    		"date"     : point[0].Text,
-		    		'location' : point[1].Text,
+		    		'location' : point[1].Text.split(" "),
 		    	};
 		    })
 
-
 		    console.log('\n Resulting Formatted Data');
-		    console.log(geoData[0]);
+		    console.log(acc[0]);
 
-		   	// $('#data').html(JSON.stringify(acc));
-
-			setupMap();
-		   	
-
+			setupMap(function(){
+				addDataToMap(acc);
+			});
 		}
 
 		
 
 		// http://leafletjs.com/examples/quick-start.html
-		function setupMap(){
-			var map = L.map('map').setView([42.342296, -71.0873438], 13);
+		function setupMap(callback){
+
+			// Make map a GLOBAL var
+			map = L.map('map').setView([42.342296, -71.0873438], 13);
 
 			L.tileLayer('http://{s}.tiles.mapbox.com/v3/alexjohnson505.k2pknn10/{z}/{x}/{y}.png', {
 		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 		    maxZoom: 18
 			}).addTo(map);
 
-			addDataToMap();
-
+			callback();
 		}
 
-		function addDataToMap(){
-			// var marker = L.marker([51.5, -0.09]).addTo(map);
+		function addDataToMap(data){
+			_.each(data, function(point){
+				var circle = L.circle([point.location[1], point.location[0]], 50, {
+				    color: 'red',
+				    fillColor: '#f03',
+				    fillOpacity: 0.2
+				}).addTo(map);
 
+			})
 		}
 
 	</script>

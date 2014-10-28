@@ -1,0 +1,67 @@
+<html>
+<head>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script type="text/javascript" src="xml.js"></script>
+</head>
+<body>
+	<h1>Hello</h1>
+	<p id="data"></p>
+</body>
+	<script type="text/javascript">
+
+		console.log("Loading...");
+
+		$.ajax({
+		    url: "data/josh.xml",
+		    dataType:"xml"
+		}).done(function(xmlData){
+			convertData(xmlData);
+		});
+
+		// Convert data into usable format
+		function convertData(xmlData){
+
+			/******************************
+		       Fetch Data from XML (KML)
+		     ******************************/
+
+			// Convert XML to JSON
+			// https://github.com/stsvilik/Xml-to-JSON
+		    var jsonData = xml.xmlToJSON(xmlData);
+		    
+		    console.log("XML Converted to JSON...");
+
+		    console.log("\n Data from Conversion:")
+		    console.dir(jsonData);
+
+		    var data = jsonData.kml.Document.Placemark['gx:Track'];
+		    
+		    // console.log("\n Time List:")
+		    // console.log(data.when);
+
+		    // console.log("\n Coord List:")
+		    // console.log(data["gx:coord"]);
+
+		    /******************************
+		       Convert into Usable Format
+		     ******************************/
+		    var acc = [];
+
+		    acc = _.zip(data.when, data["gx:coord"]);
+
+		    acc = _.map(acc, function(point, key){
+		    	return {
+		    		"date"     : point[0].Text,
+		    		'location' : point[1].Text,
+		    	};
+		    })
+
+		    console.log('\n Resulting Formatted Data');
+		    console.log(acc);
+
+		   	// $('#data').html(JSON.stringify(acc));
+		}
+
+	</script>
+</html>

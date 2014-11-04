@@ -1,61 +1,75 @@
 <html>
 <head>
-	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script type="text/javascript" src="/js/xml.min.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+	  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
 	<script src="http://d3js.org/d3.v3.min.js"></script>       <!-- D3.js -->
 	<script src="http://d3js.org/topojson.v1.min.js"></script> <!-- topoJSON -->
 	<script src="js/datamaps.js"></script>                     <!-- Datamaps -->
 	<script src="js/datamaps.usa.min.js"></script>             <!-- Datamaps USA data -->
+	<script src="js/fetchData.js"></script>
 </head>
 <body>
 	<div id="container" style="position: relative; width: 1000; height: 1000px;"></div>
 	<script>
-		console.log("Drawing Map...")
 
-	    var map = new Datamap({
-	    	element: document.getElementById('container'),
-	    	scope: 'usa',
-	    	setProjection: projection,
-	    	done: function() {
-	    		console.log("Map Complete");
-	    	}, 
-	    	geographyConfig: {
-            	popupTemplate: function(geo, data) {
-                	return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong></div>'].join('');
-            	},
-            	popupOnHover: false, //disable the popup while hovering
-        	}
-	    });
-
-	    // Configure projection (scale, etc)
-	    function projection(element){
-	    	var boston = [-71.2, 42.9];
-
-			var projection = d3.geo.equirectangular()
-				.center(boston)
-				.scale(20000);
-			  	// .rotate([4.4, 0])
-			  	// .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-			
-			return { 
-				path: d3.geo.path().projection(projection), 
-				projection: projection 
-			};
-	    }
-
-	    var bubbles = [{
-	      	name: "Test",	
-	      	latitude: 42.3386904,
-	        longitude: -71.0884613,
-	        radius: 10,
-	      }
-	    ];
-
-		//draw bubbles for bubbles
-		map.bubbles(bubbles, {
-		    popupTemplate: function (geo, data) { 
-		            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
-		    }
+		fetchData(function(){
+			setupMap(function(){});
 		});
+
+	    // var bubbles = [{
+	    //   	name: "Test",	
+	    //   	latitude: 42.3386904,
+	    //     longitude: -71.0884613,
+	    //     radius: 10,
+	    //   }
+	    // ];
+
+		// //draw bubbles for bubbles
+		// map.bubbles(bubbles, {
+		//     popupTemplate: function (geo, data) { 
+		//             return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
+		//     }
+		// });
+
+		// When data comes back
+		function setupMap(){
+			console.log("\nSetting up the Map...");
+
+		    var map = new Datamap({
+		    	element: document.getElementById('container'),
+		    	scope: 'usa',
+		    	setProjection: projection,
+		    	done: function() {
+		    		console.log("Blank Map Created");
+		    	}, 
+		    	geographyConfig: {
+	            	popupTemplate: function(geo, data) {
+	                	return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong></div>'].join('');
+	            	},
+	            	popupOnHover: false, //disable the popup while hovering
+	        	}
+		    });
+
+		    // Configure projection (scale, etc)
+		    function projection(element){
+		    	var boston = [-71.2, 42.9];
+
+				var projection = d3.geo.equirectangular()
+					.center(boston)
+					.scale(20000);
+				  	// .rotate([4.4, 0])
+				  	// .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+				
+				return { 
+					path: d3.geo.path().projection(projection), 
+					projection: projection 
+				};
+		    }
+		}
 	</script>
 </body>
 

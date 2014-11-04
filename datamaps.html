@@ -6,18 +6,41 @@
 	<script src="js/datamaps.usa.min.js"></script>
 </head>
 <body>
-	<h1>Hello</h1>
-	<div id="container" style="position: relative; width: 700; height: 500px;"></div>
+	<div id="container" style="position: relative; width: 1000; height: 1000px;"></div>
 	<script>
+		console.log("Drawing Map...")
+
 	    var map = new Datamap({
 	    	element: document.getElementById('container'),
 	    	scope: 'usa',
+	    	setProjection: projection,
+	    	done: function() {
+	    		console.log("Map Complete");
+	    	}, 
 	    	geographyConfig: {
             popupTemplate: function(geo, data) {
                 return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong></div>'].join('');
             },
+            popupOnHover: false, //disable the popup while hovering
         }
 	    });
+
+	    // Configure projection (scale, etc)
+	    function projection(element){
+	    	var boston = [-71.2, 42.9];
+
+			var projection = d3.geo.equirectangular()
+				.center(boston)
+				.scale(20000);
+			  	// .rotate([4.4, 0])
+			  	// .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+			
+
+			return { 
+				path: d3.geo.path().projection(projection), 
+				projection: projection 
+			};
+	    }
 
 	    // enable state names
 	    // map.labels()

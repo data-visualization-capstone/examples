@@ -17,28 +17,61 @@
 	<div id="map" style="height: 580px;"></div>
 
 	<script type="text/javascript">
-
 		console.log("Loading...");
-
-		var fileUrl = "data/josh.xml";
-
-		resp = Convert.convertData(fileUrl);
-		console.log(resp)
-
+		$.ajax({
+		    url: "data/josh.xml",
+		    dataType:"xml"
+		}).done(function(xmlData){
+			convertData(xmlData);
+		});
+		// Convert data into usable format
+		function convertData(xmlData){
+			/******************************
+		       Fetch Data from XML (KML)
+		     ******************************/
+			// Convert XML to JSON
+			// https://github.com/stsvilik/Xml-to-JSON
+		    var jsonData = xml.xmlToJSON(xmlData);
+		    
+		    console.log("XML Converted to JSON...");
+		    console.log("\n Data from Conversion:")
+		    console.dir(jsonData);
+		    var data = jsonData.kml.Document.Placemark['gx:Track'];
+		    
+		    // console.log("\n Time List:")
+		    // console.log(data.when);
+		    // console.log("\n Coord List:")
+		    // console.log(data["gx:coord"]);
+		    /******************************
+		       Convert into Usable Format
+		     ******************************/
+		    var acc = [];
+		    acc = _.zip(data.when, data["gx:coord"]);
+		    acc = _.map(acc, function(point, key){
+		    	return {
+		    		"date"     : point[0].Text,
+		    		'location' : point[1].Text.split(" "),
+		    	};
+		    })
+		    // Limit to 300 data points
+		    acc = _.sample(acc, 2000);
+		    console.log('\n Resulting Formatted Data');
+		    console.log(acc[0]);
+			setupMap(function(){
+				addDataToMap(acc);
+			});
+		}
+		
 		// http://leafletjs.com/examples/quick-start.html
 		function setupMap(callback){
-
 			// Make map a GLOBAL var
 			map = L.map('map').setView([42.342296, -71.0873438], 13);
-
 			L.tileLayer('http://{s}.tiles.mapbox.com/v3/alexjohnson505.k2pknn10/{z}/{x}/{y}.png', {
 		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 		    maxZoom: 18	
 			}).addTo(map);
-
 			callback();
 		}
-
 		function addDataToMap(data){
 			_.each(data, function(point){
 				var circle = L.circle([point.location[1], point.location[0]], 50, {
@@ -46,10 +79,8 @@
 				    fillColor: '#f03',
 				    fillOpacity: 0.2
 				}).addTo(map);
-
 			})
 		}
-
 	</script>
 </body>
 </html>

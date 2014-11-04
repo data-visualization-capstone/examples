@@ -4,18 +4,27 @@ var Convert = {
 	// Description
 	description : "Converts an .xml file into a usable .json format.",
 
+	/******************************
+	  Fetch Data from XML (KML)
+	******************************/
 
-	// Convert data into usable format
-	convertData : function(fileUrl, callback){
-
-		var xmlData = this.fetchData(fileUrl, function(xmlData){
-			console.log(xmlData)
+	fetchData : function(url, next){
+		$.ajax({
+		    url: url,
+		    dataType:"xml"
+		}).done(function(xmlData){
+			next(xmlData);
 		});
-		
+	},
 
+	/******************************
+	  Format Data to JSON
+	******************************/
+	formatData : function(xml){
+		
 		// Convert XML to JSON
 		// https://github.com/stsvilik/Xml-to-JSON
-		var jsonData = xml.xmlToJSON(xmlData);
+		var jsonData = xml.xmlToJSON(xml);
 		
 		console.log("XML Converted to JSON...");
 
@@ -51,22 +60,31 @@ var Convert = {
 		console.log(acc[0]);
 
 		return acc;
+
 		// setupMap(function(){
 		// 	addDataToMap(acc);
 		// });
-	}
-	
-	/******************************
-	  Fetch Data from XML (KML)
-	******************************/
 
-	fetchData : function(url, callback){
-		$.ajax({
-		    url: url,
-		    dataType:"xml"
-		}).done(function(xmlData){
-			callback(xmlData);
-		});
+	},
+
+
+	// Convert data into usable format
+	convertData : function(fileUrl, callback){
+
+		var jsonData = this.fetchData(fileUrl, this.formatData);
+
+			// function(xmlData){
+			// console.log(xmlData)
+
+			// formatData(xmlData, function(jsonData){
+			// 	console.log(jsonData);
+
+			// 	callback(jsonData);
+
+			// })
+		
+
+		callback(jsonData)
 	},
 
 }

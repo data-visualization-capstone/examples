@@ -16,30 +16,18 @@
 	<div id="container" style="position: relative; width: 1000; height: 1000px;"></div>
 	<script>
 
-		fetchData(function(){
-			setupMap(function(){});
+		// Waterfall map creation
+		setupMap(function(){
+			fetchData(function(data){
+				renderData(data);
+			});
 		});
 
-	    // var bubbles = [{
-	    //   	name: "Test",	
-	    //   	latitude: 42.3386904,
-	    //     longitude: -71.0884613,
-	    //     radius: 10,
-	    //   }
-	    // ];
-
-		// //draw bubbles for bubbles
-		// map.bubbles(bubbles, {
-		//     popupTemplate: function (geo, data) { 
-		//             return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
-		//     }
-		// });
-
 		// When data comes back
-		function setupMap(){
+		function setupMap(next){
 			console.log("\nSetting up the Map...");
 
-		    var map = new Datamap({
+		    map = new Datamap({
 		    	element: document.getElementById('container'),
 		    	scope: 'usa',
 		    	setProjection: projection,
@@ -61,14 +49,37 @@
 				var projection = d3.geo.equirectangular()
 					.center(boston)
 					.scale(20000);
-				  	// .rotate([4.4, 0])
-				  	// .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-				
+
 				return { 
 					path: d3.geo.path().projection(projection), 
 					projection: projection 
 				};
 		    }
+
+		    next();
+		}
+
+		function renderData(data){
+			console.log("\nPlacing Data points....");
+
+			var dataPoints = [];
+
+			_.each(data, function(p){
+				console.log(p);
+			})
+			dataPoints.push({
+				name: "Test",
+				latitude: 42.3386904,
+	    		longitude: -71.0884613,
+	    		radius: 10
+	    	});
+
+			//draw bubbles for bubbles
+			map.bubbles(dataPoints, {
+			    popupTemplate: function (geo, data) { 
+			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
+			    }
+			});
 		}
 	</script>
 </body>

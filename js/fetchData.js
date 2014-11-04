@@ -35,7 +35,7 @@ function fetchData(next){
 	    })
 	    
 	    // Limit to 300 data points
-	    // acc = _.sample(acc, 2000);
+	    acc = _.sample(acc, 6000);
 
 	    console.log('\n Resulting Formatted Data');
 	    console.log(acc[0]);

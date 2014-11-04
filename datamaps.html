@@ -45,6 +45,7 @@
 		    // Configure projection (scale, etc)
 		    function projection(element){
 		    	var boston = [-71.2, 42.9];
+		    	var usa = [19, -3];
 
 				var projection = d3.geo.equirectangular()
 					.center(boston)
@@ -59,30 +60,64 @@
 		    next();
 		}
 
+
 		function renderData(data){
 			console.log("\nConverting Data points....");
 
-			var dataPoints = [];
+			// var dataPoints = [];
+
+			// _.each(data, function(p){
+
+			// 	dataPoints.push({
+			// 		name: p.date,
+			// 		latitude: parseFloat(p.location[1]),
+		 //    		longitude: parseFloat(p.location[0]),
+		 //    		radius: 3
+		 //    	});
+			// })
+			
+			// console.log("Placing " + dataPoints.length + " Data points....");
+
+			// //draw bubbles for bubbles
+			// map.bubbles(dataPoints, {
+			//     popupTemplate: function (geo, data) { 
+			//             return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
+			//     }
+			// });
+
+			var arcs = [];
+
+			var prev = {};
 
 			_.each(data, function(p){
+				if (!prev){
+					return
+				}
 
-				dataPoints.push({
-					name: p.date,
+				var current = {
 					latitude: parseFloat(p.location[1]),
 		    		longitude: parseFloat(p.location[0]),
-		    		radius: 3
-		    	});
+				}
+
+				arcs.push({
+				    origin: prev,
+				    destination: current,
+				});
+
+				prev = current;
+
 			})
 			
-			console.log("Placing " + dataPoints.length + " Data points....");
+			console.log("Placing " + arcs.length + " Data points....");
 
 			//draw bubbles for bubbles
-			map.bubbles(dataPoints, {
+			map.arc(arcs, {
 			    popupTemplate: function (geo, data) { 
 			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
 			    }
 			});
 		}
+
 	</script>
 </body>
 

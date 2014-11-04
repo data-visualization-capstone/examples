@@ -33,8 +33,10 @@ function fetchData(next){
 	    		'location' : point[1].Text.split(" "),
 	    	};
 	    })
+	    
 	    // Limit to 300 data points
-	    acc = _.sample(acc, 2000);
+	    // acc = _.sample(acc, 2000);
+
 	    console.log('\n Resulting Formatted Data');
 	    console.log(acc[0]);
 

@@ -60,19 +60,21 @@
 		}
 
 		function renderData(data){
-			console.log("\nPlacing Data points....");
+			console.log("\nConverting Data points....");
 
 			var dataPoints = [];
 
 			_.each(data, function(p){
-				console.log(p);
+
+				dataPoints.push({
+					name: p.date,
+					latitude: parseFloat(p.location[1]),
+		    		longitude: parseFloat(p.location[0]),
+		    		radius: 3
+		    	});
 			})
-			dataPoints.push({
-				name: "Test",
-				latitude: 42.3386904,
-	    		longitude: -71.0884613,
-	    		radius: 10
-	    	});
+			
+			console.log("Placing " + dataPoints.length + " Data points....");
 
 			//draw bubbles for bubbles
 			map.bubbles(dataPoints, {

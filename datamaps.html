@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1>Hello</h1>
-	<div id="container" style="position: relative; width: 500px; height: 300px;"></div>
+	<div id="container" style="position: relative; width: 700; height: 500px;"></div>
 	<script>
 	    var map = new Datamap({
 	    	element: document.getElementById('container'),
@@ -15,9 +15,27 @@
 	    	geographyConfig: {
             popupTemplate: function(geo, data) {
                 return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong></div>'].join('');
-            }
+            },
         }
 	    });
+
+	    // enable state names
+	    // map.labels()
+
+	    var bubbles = [{
+	      	name: "Test",	
+	      	latitude: 42.3386904,
+	        longitude: -71.0884613,
+	        radius: 10,
+	      }
+	    ];
+
+		//draw bubbles for bubbles
+		map.bubbles(bubbles, {
+		    popupTemplate: function (geo, data) { 
+		            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
+		    }
+		});
 	</script>
 </body>
 

@@ -20,7 +20,7 @@
 		// Waterfall map creation
 		setupMap(function(){
 			fetchData(function(data){
-				renderData(data.slice(1000, 2000));
+				renderData(data.slice(1000, 1500));
 			});
 		});
 
@@ -63,6 +63,29 @@
 		    next();
 		}
 
+		function makeArcs(data){
+			var arcs = [];
+			var prev = {};
+
+			_.each(data, function(p){
+				var current = {
+					latitude: parseFloat(p.location[1]),
+			    	longitude: parseFloat(p.location[0]),
+				}
+
+				if (prev.latitude){
+					// Add arc to accumulator
+					arcs.push({ origin: prev, destination: current });	
+				}
+
+				// Save data to previous for use in next iteration
+				prev = current;
+
+			})
+
+			return arcs;
+		}
+
 
 		function renderData(data){
 			console.log("\nConverting Data points....");
@@ -88,33 +111,10 @@
 			//     }
 			// });
 
-			var arcs = [];
-
-			var prev = {};
-
-			_.each(data, function(p){
-				if (!prev){
-					return
-				}
-
-				var current = {
-					latitude: parseFloat(p.location[1]),
-		    		longitude: parseFloat(p.location[0]),
-				}
-
-				arcs.push({
-				    origin: prev,
-				    destination: current,
-				});
-
-				prev = current;
-
-			})
-			
-			console.log("Placing " + arcs.length + " Data points....");
+			// console.log("Placing " + arcs.length + " Data points....");
 
 			//draw bubbles for bubbles
-			map.arc(arcs, {
+			map.arc(makeArcs(data), {
 			    popupTemplate: function (geo, data) { 
 			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
 			    },

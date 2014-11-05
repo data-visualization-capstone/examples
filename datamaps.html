@@ -3,8 +3,9 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 	<script type="text/javascript" src="/js/xml.min.js"></script>
+	
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-	  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
 	<script src="http://d3js.org/d3.v3.min.js"></script>       <!-- D3.js -->
 	<script src="http://d3js.org/topojson.v1.min.js"></script> <!-- topoJSON -->
@@ -19,7 +20,7 @@
 		// Waterfall map creation
 		setupMap(function(){
 			fetchData(function(data){
-				renderData(data);
+				renderData(data.slice(0, 1000));
 			});
 		});
 

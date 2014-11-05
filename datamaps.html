@@ -20,7 +20,7 @@
 		// Waterfall map creation
 		setupMap(function(){
 			fetchData(function(data){
-				renderData(data.slice(0, 1000));
+				renderData(data.slice(1000, 2000));
 			});
 		});
 
@@ -45,12 +45,14 @@
 
 		    // Configure projection (scale, etc)
 		    function projection(element){
-		    	var boston = [-71.2, 42.9];
+		    	var boston = [-71.2, 42.5];
 		    	var usa = [19, -3];
+
+		    	var scale = 100000;
 
 				var projection = d3.geo.equirectangular()
 					.center(boston)
-					.scale(20000);
+					.scale(scale);
 
 				return { 
 					path: d3.geo.path().projection(projection), 
@@ -115,7 +117,10 @@
 			map.arc(arcs, {
 			    popupTemplate: function (geo, data) { 
 			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
-			    }
+			    },
+			    strokeWidth: 1,
+			    arcSharpness: 0,
+
 			});
 		}
 

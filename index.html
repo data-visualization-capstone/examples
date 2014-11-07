@@ -1,83 +1,53 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-	<script type="text/javascript" src="/lib/xml.min.js"></script>
-
-	 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-	  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-
+  <meta charset="utf-8">
+  <link href="/css/base.css" rel="stylesheet" />
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<p id="data"></p>
+  <div id='map'></div>
+  <div id='selections' class="selections">
+    <a href='#' class="show">Choose what supermarkets to display</a>
+    <div class='content'>
+      <a href='#' class="hide">Hide</a>
+      <div id="toggles">
+      </div>
+    </div>
+  </div>
+  <div id='loading'>
+  </div>
+  <div id='selected'>
+    <h1>Explore supermarkets in the UK</h1>
+  </div>
+  <div id='about'>
+    <!-- <p class='content'>
+      Explore UK supermarkets using a voronoi diagram. Created by <a href="http://chriszetter.com">Chris Zetter</a>, powered by data from <a href="http://www.superlocate.net/">SuperLocate</a>, maps copyright
+      <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>.
+      <a href='#' class="hide">Hide</a>
+    </div> -->
+  </div>
 
-	<div id="map" style="height: 580px;"></div>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 
-	<script type="text/javascript">
-		console.log("Loading...");
-		$.ajax({
-		    url: "data/josh.xml",
-		    dataType:"xml"
-		}).done(function(xmlData){
-			convertData(xmlData);
-		});
-		// Convert data into usable format
-		function convertData(xmlData){
-			/******************************
-		       Fetch Data from XML (KML)
-		     ******************************/
-			// Convert XML to JSON
-			// https://github.com/stsvilik/Xml-to-JSON
-		    var jsonData = xml.xmlToJSON(xmlData);
-		    
-		    console.log("XML Converted to JSON...");
-		    console.log("\n Data from Conversion:")
-		    console.dir(jsonData);
-		    var data = jsonData.kml.Document.Placemark['gx:Track'];
-		    
-		    // console.log("\n Time List:")
-		    // console.log(data.when);
-		    // console.log("\n Coord List:")
-		    // console.log(data["gx:coord"]);
-		    /******************************
-		       Convert into Usable Format
-		     ******************************/
-		    var acc = [];
-		    acc = _.zip(data.when, data["gx:coord"]);
-		    acc = _.map(acc, function(point, key){
-		    	return {
-		    		"date"     : point[0].Text,
-		    		'location' : point[1].Text.split(" "),
-		    	};
-		    })
-		    // Limit to 300 data points
-		    acc = _.sample(acc, 2000);
-		    console.log('\n Resulting Formatted Data');
-		    console.log(acc[0]);
-			setupMap(function(){
-				addDataToMap(acc);
-			});
-		}
-		
-		// http://leafletjs.com/examples/quick-start.html
-		function setupMap(callback){
-			// Make map a GLOBAL var
-			map = L.map('map').setView([42.342296, -71.0873438], 13);
-			L.tileLayer('http://{s}.tiles.mapbox.com/v3/alexjohnson505.k2pknn10/{z}/{x}/{y}.png', {
-		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		    maxZoom: 18	
-			}).addTo(map);
-			callback();
-		}
-		function addDataToMap(data){
-			_.each(data, function(point){
-				var circle = L.circle([point.location[1], point.location[0]], 50, {
-				    color: 'red',
-				    fillColor: '#f03',
-				    fillOpacity: 0.2
-				}).addTo(map);
-			})
-		}
-	</script>
+  <script type="text/javascript" src="/lib/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+  <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js"></script>
+
+  <script src="/js/plot.js"></script>
+  <script src="/js/fetchData.js"></script>
+
+  <script>
+    map = L.mapbox.map('map', 'zetter.i73ka9hn')
+      .fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
+
+    initialSelection = d3.set(['Tesco', 'Sainsburys']);
+
+    // voronoiMap(map, url, initialSelection);
+    
+    drawPoints(map, '/data/supermarkets.csv', initialSelection);
+  </script>
 </body>
 </html>

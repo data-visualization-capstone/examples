@@ -1,3 +1,18 @@
+showHide = function(selector) {
+  d3.select(selector).select('.hide').on('click', function(){
+    d3.select(selector)
+      .classed('visible', false)
+      .classed('hidden', true);
+  });
+
+  d3.select(selector).select('.show').on('click', function(){
+    d3.select(selector)
+      .classed('visible', true)
+      .classed('hidden', false);
+  });
+}
+
+
 drawPoints = function(map, url, initialSelections) {
   var pointTypes = d3.map(),
       points = [],

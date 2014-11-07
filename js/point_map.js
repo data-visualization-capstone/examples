@@ -125,8 +125,8 @@ drawPoints = function(map, url, initialSelections) {
           id: key,
           latitude: point.location[1],
           longitude: point.location[0],
-          name: "Waitrose Abergavenny",
-          type: "Waitrose",
+          name: key,
+          type: "Josh",
           url: "..."
         }
 

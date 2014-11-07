@@ -112,11 +112,28 @@ drawPoints = function(map, url, initialSelections) {
     }
   };
 
+  // Points from XML
   map.on('ready', function() {
-    d3.csv(url, function(csv) {
-      points = csv;
 
-      console.log(points);
+    fetchData(function(data){
+      points = data.slice(0, 1000);
+
+      points = _.map(points, function(point, key){
+        
+        var i = {
+          color: "609128",
+          id: key,
+          latitude: point.location[1],
+          longitude: point.location[0],
+          name: "Waitrose Abergavenny",
+          type: "Waitrose",
+          url: "..."
+        }
+
+        return i;
+      })
+
+      console.log(points[0])
 
       points.forEach(function(point) {
         pointTypes.set(point.type, {type: point.type, color: point.color});
@@ -124,6 +141,7 @@ drawPoints = function(map, url, initialSelections) {
       
       drawPointTypeSelection();
       map.addLayer(mapLayer);
-    })
+      
+    });
   });
 }

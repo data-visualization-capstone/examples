@@ -14,7 +14,7 @@
 	<script src="js/fetchData.js"></script>
 </head>
 <body>
-	<div id="container" style="position: relative; width: 1000; height: 1000px;"></div>
+	<div id="container" style="position: relative; width: 1000; height: 700px;"></div>
 	<script>
 
 		// Waterfall map creation
@@ -32,89 +32,59 @@
 		    	element: document.getElementById('container'),
 		    	scope: 'usa',
 		    	setProjection: projection,
-		    	done: function() {
-		    		console.log("Blank Map Created");
-		    	}, 
 		    	geographyConfig: {
 	            	popupTemplate: function(geo, data) {
 	                	return ['<div class="hoverinfo"><strong>' + geo.properties.name + '</strong></div>'].join('');
 	            	},
 	            	popupOnHover: false, //disable the popup while hovering
-	        	}
+	        	},
+	        	done: function() {
+		    		console.log("Blank Map Created");
+		    	}, 
 		    });
 
 		    // Configure projection (scale, etc)
 		    function projection(element){
-		    	var boston = [-71.2, 42.5];
-		    	var usa = [19, -3];
+		    	var boston = [-71.2, 42.5];  // center on MA
+		    	var usa = [19, -3];          // center on US
 
-		    	var scale = 100000;
+		    	var scale = 100000;          // zoom
 
-				var projection = d3.geo.equirectangular()
-					.center(boston)
-					.scale(scale);
+				var projection = d3.geo.equirectangular().center(boston).scale(scale);
 
 				return { 
 					path: d3.geo.path().projection(projection), 
-					projection: projection 
+					projection: projection
 				};
 		    }
 
 		    next();
 		}
 
-		function makeArcs(data){
+		function renderArcs(data){
 			var arcs = [];
 			var prev = {};
 
 			_.each(data, function(p){
+				// Extract current location
 				var current = {
 					latitude: parseFloat(p.location[1]),
 			    	longitude: parseFloat(p.location[0]),
 				}
 
+				// Add an arc
 				if (prev.latitude){
-					// Add arc to accumulator
 					arcs.push({ origin: prev, destination: current });	
 				}
 
-				// Save data to previous for use in next iteration
+				// Save last location
 				prev = current;
 
 			})
 
-			return arcs;
-		}
+			console.log("Placing " + arcs.length + " Data points....");
 
-
-		function renderData(data){
-			console.log("\nConverting Data points....");
-
-			// var dataPoints = [];
-
-			// _.each(data, function(p){
-
-			// 	dataPoints.push({
-			// 		name: p.date,
-			// 		latitude: parseFloat(p.location[1]),
-		 //    		longitude: parseFloat(p.location[0]),
-		 //    		radius: 3
-		 //    	});
-			// })
-			
-			// console.log("Placing " + dataPoints.length + " Data points....");
-
-			// //draw bubbles for bubbles
-			// map.bubbles(dataPoints, {
-			//     popupTemplate: function (geo, data) { 
-			//             return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
-			//     }
-			// });
-
-			// console.log("Placing " + arcs.length + " Data points....");
-
-			//draw bubbles for bubbles
-			map.arc(makeArcs(data), {
+			map.arc(arcs, {
 			    popupTemplate: function (geo, data) { 
 			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
 			    },
@@ -122,6 +92,39 @@
 			    arcSharpness: 0,
 
 			});
+		}
+
+		function renderPoints(data){
+
+			var dataPoints = [];
+
+			_.each(data, function(p){
+				dataPoints.push({
+					name: p.date,
+					latitude: parseFloat(p.location[1]),
+					longitude: parseFloat(p.location[0]),
+					radius: 3
+				});
+			})
+
+			console.log("Placing " + dataPoints.length + " Data points....");
+
+			//draw bubbles
+			map.bubbles(dataPoints, {
+			    popupTemplate: function (geo, data) { 
+			            return ['<div class="hoverinfo">' +  data.name + '</div>'].join('');
+			    }
+			});
+
+		}
+
+
+		function renderData(data){
+			console.log("\nConverting Data points....");
+
+			renderPoints(data);
+			renderArcs(data);
+
 		}
 
 	</script>

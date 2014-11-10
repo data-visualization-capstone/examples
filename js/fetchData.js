@@ -10,7 +10,7 @@ function fetchData(next){
 	******************************/
 
 	$.ajax({
-	    url: "data/alex.xml",
+	    url: "/data/alex.xml",
 	    dataType:"xml"
 	}).done(function(xmlData){
 		convertData(xmlData);

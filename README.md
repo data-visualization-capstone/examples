@@ -16,14 +16,11 @@ Source
 
 This repo contains a fork from Chris Zetter's [Voronoi maps](http://chriszetter.com/blog/2014/06/14/visualising-supermarkets-with-a-voronoi-diagram/) project - using D3 and Leaflet. You can find the [original project here](https://github.com/zetter/voronoi-maps).
 
-Original Demo
----
-
-See an [explanation of the code](http://chriszetter.com/blog/2014/06/15/building-a-voronoi-map-with-d3-and-leaflet/) and a [demo](http://chriszetter.com/voronoi-map/examples/uk-supermarkets/).
 
 #### Setup:
 
-Run a local Apache server, load index.html
+Run a local Apache server. For Mac OSX users, I recommend using the MAMP app. 
+Load index.html for your local server. In the case of MAMP, open localhost:888
 
 #### Output:
 

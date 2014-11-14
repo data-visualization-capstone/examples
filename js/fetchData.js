@@ -42,8 +42,10 @@ function fetchData(next){
 	    	};
 	    })
 
+	    // acc = _.sample(acc, 3000);
+
 	    console.log('\n Resulting Formatted Data');
-	    console.log(acc[0]);
+	    console.log(acc);
 
 	    next(acc)
 	}

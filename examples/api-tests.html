@@ -14,7 +14,7 @@
 
   <br>
 
-  <button onClick="newLocation()">Post Location</button>
+  <button onClick="postLocation()">Post Location</button>
 
   <br>
 
@@ -22,7 +22,7 @@
 
   <br>
 
-  <p id="output"></p>
+  <p style="padding: 40px; float: right;" id="output"></p>
 
   <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
@@ -45,7 +45,7 @@
     }
 
     // Create a new dummy location
-    function newLocation(){
+    function postLocation(){
 
       $.ajax({
         type: "POST",
@@ -74,14 +74,22 @@
     }
 
     function success(resp){
+
       console.log(resp);
-      $('#output').html(resp.length);
+      
+      var acc = resp.length + " Total <br>";
+      _.each(resp, function(object){
+        acc = acc + object._id + " | " + ", <br>"; 
+      })
+
+      $('#output').html(acc);
     }
 
     function error(resp){
       console.log(resp);
       $('#output').html(resp);
     }
+
   </script>
 </body>
 </html>

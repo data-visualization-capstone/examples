@@ -14,6 +14,8 @@
       <a href='#' class="hide">Hide</a>
       <div id="toggles">
       </div>
+      <a href="#" id="showConn">Show Connections</a>
+      <a href="#" id="hideConn" style="display:none;">Hide Connections</a>
     </div>
   </div>
   <div id='loading'>
@@ -48,6 +50,17 @@
     // voronoiMap(map, url, initialSelection);
     
     drawPoints(map, '/data/supermarkets.csv', initialSelection);
+
+    $("#showConn").click(function(){
+      d3.selectAll("line").style("opacity", "1");
+      $(this).hide();
+      $("#hideConn").show();
+    });
+    $("#hideConn").click(function(){
+      d3.selectAll("line").style("opacity", "0");
+      $(this).hide();
+      $("#showConn").show();
+    });
   </script>
 </body>
 </html>

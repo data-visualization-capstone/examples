@@ -101,13 +101,15 @@ drawPoints = function(map, url, initialSelections) {
       .style("margin-top", topLeft.y + "px");
 
     var g = svg.append("g")
-      .attr("transform", "translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")");
+      .attr("transform", "translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")")
+      .attr("pointer-events", "all");
 
     var svgPoints = g.attr("class", "points")
       .selectAll("g")
         .data(filteredPoints)
       .enter().append("g")
-        .attr("class", "point");
+        .attr("class", "point")
+        .style("z-index", 999);
 
     svgPoints.append("path")
       .attr("class", "point-cell")
@@ -117,7 +119,39 @@ drawPoints = function(map, url, initialSelections) {
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style('fill', function(d) { return '#' + d.color } )
-      .attr("r", 2);
+      .attr("r", 2)
+      .attr("pointer-events", "all");
+
+    svgPoints.each(function(){
+
+      if($(this).next().length == 1){
+        var this_transform = $(this).children("circle").attr("transform"),
+            next_transform = $(this).next().children("circle").attr("transform"),
+            this_position = this_transform.substring(10, this_transform.length - 1).split(","),
+            next_position = next_transform.substring(10, next_transform.length - 1).split(",");
+
+        d3.select(this).append("line")
+          .attr("x1", this_position[0])
+          .attr("y1", this_position[1])
+          .attr("x2", next_position[0])
+          .attr("y2", next_position[1])
+          .style("stroke", "rgb(255,0,0)")
+          .style("stroke-width", "stroke-width:2")
+          .style("opacity", "0");
+      }
+    });
+
+    // d3.select("svg").selectAll("g").on("mouseenter", function(){
+    //   d3.select(this).select("line").style("opacity", "1");
+    // });
+    $("g").each(function(){
+      $(this).hover(function(){
+        $(this).children("line").css("opacity", 1);
+      },
+      function(){
+        $(this).children("line").css("opacity", 0);
+      });
+    });
   }
 
   var mapLayer = {

@@ -161,3 +161,7 @@ p {
 .mapbox-control-info {
   display: none !important;
 }
+
+circle{
+  cursor:pointer;
+}

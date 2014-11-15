@@ -12,6 +12,33 @@ showHide = function(selector) {
   });
 }
 
+////////////////////////////////////////////
+// Functions for filtering points by date //
+////////////////////////////////////////////
+
+filter = function (month, day){
+  $("circle").each(function(){
+    var thisDate = $(this).attr("date").substring(0, 10).split("-"),
+        thisMonth = Number(thisDate[1]),
+        thisDay = Number(thisDate[2]);
+
+    if(thisMonth != month && thisDay != day){
+      $(this).parent("g").hide();
+    } else if($(this).parent("g").css("display") == "none"){
+      $(this).parent("g").show();
+    }
+  });
+}
+$("#dateFilter").click(function(){
+    filter($("#month").val(), $("#day").val());
+  });
+clearFilter = function (){
+  $("circle").parent("g").show();
+}
+
+//////////////////////////////////
+// Functions for drawing points //
+//////////////////////////////////
 
 drawPoints = function(map, url, initialSelections) {
   var pointTypes = d3.map(),
@@ -119,11 +146,11 @@ drawPoints = function(map, url, initialSelections) {
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style('fill', function(d) { return '#' + d.color } )
+      .attr("date", function(d) { return d.date })
       .attr("r", 2)
       .attr("pointer-events", "all");
 
     svgPoints.each(function(){
-
       if($(this).next().length == 1){
         var this_transform = $(this).children("circle").attr("transform"),
             next_transform = $(this).next().children("circle").attr("transform"),
@@ -141,15 +168,18 @@ drawPoints = function(map, url, initialSelections) {
       }
     });
 
-    // d3.select("svg").selectAll("g").on("mouseenter", function(){
-    //   d3.select(this).select("line").style("opacity", "1");
-    // });
     $("g").each(function(){
       $(this).hover(function(){
-        $(this).children("line").css("opacity", 1);
+        var lines = [$(this).children("line"), $(this).next().children("line")];
+        for(var x in lines){
+          lines[x].css("opacity", 1);
+        }
       },
       function(){
-        $(this).children("line").css("opacity", 0);
+        var lines = [$(this).children("line"), $(this).next().children("line")];        
+        for(var x in lines){
+          lines[x].css("opacity", 0);
+        }
       });
     });
   }
@@ -175,13 +205,13 @@ drawPoints = function(map, url, initialSelections) {
         var i = {
           color: "609128",
           id: key,
+          date: point.date,
           latitude: point.location[1],
           longitude: point.location[0],
           name: key,
           type: "Josh",
           url: "..."
         }
-
         return i;
       })
 

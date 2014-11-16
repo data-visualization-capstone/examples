@@ -42,7 +42,7 @@ clearFilter = function (){
 // Functions for drawing points //
 //////////////////////////////////
 
-drawPoints = function(map, url, initialSelections) {
+drawPoints = function(map, url) {
   var pointTypes = d3.map(),
       points = [],
       lastSelectedPoint;
@@ -56,9 +56,9 @@ drawPoints = function(map, url, initialSelections) {
 
     labels.append("input")
       .attr('type', 'checkbox')
-      .property('checked', function(d) {
-        return initialSelections === undefined || initialSelections.has(d.type)
-      })
+      // .property('checked', function(d) {
+      //   return initialSelections === undefined || initialSelections.has(d.type)
+      // })
       .attr("value", function(d) { return d.type; })
       .on("change", drawWithLoading);
 

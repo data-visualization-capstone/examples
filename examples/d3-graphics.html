@@ -44,13 +44,14 @@
       .fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
 
     
-    drawPoints(map, '/data/supermarkets.csv');
+    drawPoints(map);
 
     $("#showConn").click(function(){
       d3.selectAll("line").style("opacity", "1");
       $(this).hide();
       $("#hideConn").show();
     });
+
     $("#hideConn").click(function(){
       d3.selectAll("line").style("opacity", "0");
       $(this).hide();

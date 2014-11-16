@@ -42,7 +42,7 @@ clearFilter = function (){
 // Functions for drawing points //
 //////////////////////////////////
 
-drawPoints = function(map, url) {
+drawPoints = function(map) {
   var pointTypes = d3.map(),
       points = [],
       lastSelectedPoint;
@@ -216,8 +216,8 @@ drawPoints = function(map, url) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      // points = data.slice(0, 1000);
-      points = data;
+      points = data.slice(0, 10000);
+      // points = data;
 
       console.log(data.length)
 

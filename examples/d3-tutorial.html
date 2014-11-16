@@ -1,0 +1,83 @@
+<html>
+<head>
+	
+</head>
+<body>
+<p>Hello</p>
+
+<div class="bar"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+
+<svg width="500" height="50">
+	<circle cx="250" cy="25" r="25"/>
+	<line x1="0" y1="0" x2="500" y2="50" stroke="black"/>
+</svg>
+
+
+
+<script>
+
+// http://alignedleft.com/tutorials/d3/
+
+var dataset = [ 25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
+                14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
+                24, 18, 25, 9, 3 ];
+
+// Render text for each data point
+d3.select("body")
+	.selectAll("span") // empty at first
+	.data(dataset)  // Parse data
+	                // Creates function(d) for accessing data
+    .enter()        // creates a new placeholder element 
+    .append("span")
+	.text(function(d) { return d; })
+	.style("color", function(d) {
+	    if (d > 15) { return "red"; } 
+	    else { return "black"; }
+	});
+
+// Render bar chart for each data point
+d3.select("body")
+	.selectAll("div") 
+	.data(dataset)  
+	                
+    .enter()        
+    .append("div")
+    .attr("class", "bar")
+	.style("color", function(d) {
+	    if (d > 15) { return "red"; } 
+	    else { return "black"; }
+	})
+	.style("height", function(d){
+		return d + "px";
+	})
+
+var circles = d3.select("svg").selectAll("circle")
+	.data(dataset)
+	.enter()
+	.append("circle");
+
+circles.attr("cx", function(d, i) {
+	// d is data (value)
+	// i is the index of current element
+	     return (i * 50) + 25;
+	 })
+	.attr("cy", 25)
+	.attr("r", function(d) {
+	     return d;
+	});
+
+</script>
+<style>
+	div.bar {
+	    display: inline-block;
+	    width: 20px;
+	    height: 75px;   /* We'll override this later */
+	    background-color: teal;
+	    margin: 0 2px;
+	}
+</style>
+
+</body>
+</html>

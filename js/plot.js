@@ -29,9 +29,11 @@ filter = function (month, day){
     }
   });
 }
+
 $("#dateFilter").click(function(){
     filter($("#month").val(), $("#day").val());
-  });
+});
+
 clearFilter = function (){
   $("circle").parent("g").show();
 }
@@ -168,6 +170,8 @@ drawPoints = function(map, url, initialSelections) {
       }
     });
 
+    // Add tracking lines
+    
     $("g").each(function(){
       $(this).hover(function(){
         var lines = [$(this).children("line"), $(this).next().children("line")],

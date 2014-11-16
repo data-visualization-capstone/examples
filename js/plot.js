@@ -170,13 +170,30 @@ drawPoints = function(map, url, initialSelections) {
 
     $("g").each(function(){
       $(this).hover(function(){
-        var lines = [$(this).children("line"), $(this).next().children("line")];
+        var lines = [$(this).children("line"), $(this).next().children("line")],
+            lines2 = [$(this).prev().children("line")];
+        for(i=1; i < 5; i++){
+          lines.push(lines[i].parent().next().children("line"));
+        }
+        for(i=0; i < 4; i++){
+          lines2.push(lines2[i].parent().prev().children("line"));
+        }
+        lines = lines.concat(lines2);
         for(var x in lines){
           lines[x].css("opacity", 1);
         }
       },
       function(){
-        var lines = [$(this).children("line"), $(this).next().children("line")];        
+        var lines = [$(this).children("line"), $(this).next().children("line")],
+            lines2 = [$(this).prev().children("line")];
+        for(i=1; i < 5; i++){
+          lines.push(lines[i].parent().next().children("line"));
+        }
+        for(i=0; i < 4; i++){
+          lines2.push(lines2[i].parent().prev().children("line"));
+        }
+        lines = lines.concat(lines2); 
+        console.log(lines.length);  
         for(var x in lines){
           lines[x].css("opacity", 0);
         }

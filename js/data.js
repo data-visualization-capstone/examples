@@ -1,7 +1,7 @@
 // Convert Google Location Data's .kml (renamed .xml)
 // into a usable JSON format.
 
-function fetchData(next){
+function loadData(next){
 
 	console.log("\nLoading JSON ...");
 

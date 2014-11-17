@@ -55,9 +55,9 @@ drawPoints = function(map) {
 
     labels.append("input")
       .attr('type', 'checkbox')
-      .property('checked', function(d) {
-        return true;
-      })
+
+      // Enable all
+      .property('checked', function(d) { return true; })
       .attr("value", function(d) { return d.type; })
       .on("change", drawWithLoading);
 
@@ -144,6 +144,7 @@ drawPoints = function(map) {
       .on('click', function(d){ console.log(d) })
       .classed("selected", function(d) { return lastSelectedPoint == d} );
 
+    // Add circles for each point
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style('fill', function(d) { return '#' + d.color } )
@@ -152,6 +153,7 @@ drawPoints = function(map) {
       .attr("pointer-events", "all")
       .attr("opacity", .1);
 
+    // Draw point-to-point connections
     svgPoints.each(function(){
       if($(this).next().length == 1){
         var this_transform = $(this).children("circle").attr("transform"),
@@ -165,39 +167,48 @@ drawPoints = function(map) {
           .attr("x2", next_position[0])
           .attr("y2", next_position[1])
           .style("stroke", "rgb(255,0,0)")
-          .style("stroke-width", "stroke-width:2")
-          .style("opacity", "0");
+          .style("stroke-width", 5)
+          .style("opacity", 0);
       }
     });
 
     // Add tracking lines
-    
+    // 5 in each direction
     $("g").each(function(){
       $(this).hover(function(){
+
         var lines = [$(this).children("line"), $(this).next().children("line")],
             lines2 = [$(this).prev().children("line")];
+
         for(i=1; i < 5; i++){
           lines.push(lines[i].parent().next().children("line"));
         }
+
         for(i=0; i < 4; i++){
           lines2.push(lines2[i].parent().prev().children("line"));
         }
+
         lines = lines.concat(lines2);
+        
         for(var x in lines){
-          lines[x].css("opacity", 1);
+          lines[x].css("opacity", .4);
         }
       },
+
       function(){
         var lines = [$(this).children("line"), $(this).next().children("line")],
             lines2 = [$(this).prev().children("line")];
+        
         for(i=1; i < 5; i++){
           lines.push(lines[i].parent().next().children("line"));
         }
+
         for(i=0; i < 4; i++){
           lines2.push(lines2[i].parent().prev().children("line"));
         }
+
         lines = lines.concat(lines2); 
-        console.log(lines.length);  
+
         for(var x in lines){
           lines[x].css("opacity", 0);
         }
@@ -216,10 +227,8 @@ drawPoints = function(map) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      points = data.slice(0, 30000);
       // points = data;
-
-      console.log(data.length)
+      points = data.slice(0, 30000);
 
       points = _.map(points, function(point, key){
         
@@ -230,13 +239,11 @@ drawPoints = function(map) {
           latitude: point.location[1],
           longitude: point.location[0],
           name: key,
-          type: "Josh",
+          type: "Alex",
           url: "..."
         }
         return i;
       })
-
-      console.log(points[0])
 
       points.forEach(function(point) {
         pointTypes.set(point.type, {type: point.type, color: point.color});

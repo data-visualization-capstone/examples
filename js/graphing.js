@@ -28,12 +28,8 @@ function componentToHex(c) {
 //////////////////////////////////
 
 drawPoints = function(map, data) {
-
-  var globalData = data;
-  console.log(globalData)
-
   var pointTypes = d3.map(),
-      points = [],
+      points = data,
       lastSelectedPoint;
 
   var drawPointTypeSelection = function() {
@@ -128,13 +124,11 @@ drawPoints = function(map, data) {
       .attr("class", "point")
       .style("z-index", 999);
 
-    /*
     svgPoints.append("path")
       .attr("class", "point-cell")
       .on('click', function(d){ console.log(d) })
       .classed("selected", function(d) { return lastSelectedPoint == d} );
-    */
-
+    
     // Add circles for each point
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -145,7 +139,6 @@ drawPoints = function(map, data) {
       .attr("opacity", .1);
 
     // Draw point-to-point connections
-    
     svgPoints.each(function(){
       if($(this).next().length == 1){
         var this_transform = $(this).children("circle").attr("transform"),
@@ -167,7 +160,6 @@ drawPoints = function(map, data) {
 
     // Add tracking lines
     // 5 in each direction
-    
     $("g").each(function(){
       $(this).hover(function(){
 
@@ -185,7 +177,7 @@ drawPoints = function(map, data) {
         lines = lines.concat(lines2);
         
         for(var x in lines){
-          lines[x].css("opacity", 0); // Set HOVER .4
+          lines[x].css("opacity", .4); // Set HOVER .4
         }
       },
 
@@ -219,8 +211,6 @@ drawPoints = function(map, data) {
   }
 
   map.on('ready', function() {
-      points = globalData;
-
       points.forEach(function(point) {
         pointTypes.set(point.type, {type: point.type, color: point.color});
       })

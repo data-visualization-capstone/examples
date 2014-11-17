@@ -244,8 +244,11 @@ drawPoints = function(map, url, initialSelections) {
 
   // Points from XML
   map.on('ready', function() {
+    console.log("Map Ready");
 
-    fetchData(function(data){
+    loadData(function(data){
+      console.log("Data Ready");
+      
       // points = data.slice(0, 1000);
       points = data;
       

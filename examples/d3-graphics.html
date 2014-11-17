@@ -10,11 +10,13 @@
   <div id='map'></div>
   <div id='selections' class="selections">
     <div class='content'>
-      <a href='#' class="hide">Hide</a>
       <div id="toggles">
       </div>
 
+      <!-- Toggle Displayed Data -->
       <a href="#" id="toggleConnections">Show Connections</a>
+      
+      <!-- Filter by Date -->
       <div>
         <label>Filter By:</label>
         <input id="month" type="text" value="month">
@@ -26,11 +28,11 @@
       </div>
     </div>
   </div>
-  <div id='loading'>
-  </div>
+
+  <div id='loading'></div>
+
   <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-
   <script type="text/javascript" src="/lib/xml.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js"></script>
@@ -39,13 +41,13 @@
   <script src="/js/fetchData.js"></script>
 
   <script>
-    map = L.mapbox.map('map', 'zetter.i73ka9hn')
-      .fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
+    map = L.mapbox.map('map', 'zetter.i73ka9hn').fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
 
     drawPoints(map);
 
     var showConnections = false;
 
+    // Show/Hide sequential lines
     $("#toggleConnections").click(function(){
       showConnections = !showConnections;
       d3.selectAll("line").style("opacity", showConnections ? 1 : 0);

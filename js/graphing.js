@@ -48,7 +48,7 @@ drawPoints = function(map) {
       lastSelectedPoint;
 
   var drawPointTypeSelection = function() {
-    showHide('#selections')
+    // showHide('#selections')
 
     labels = d3.select('#toggles').selectAll('input')
       .data(pointTypes.values())
@@ -56,9 +56,9 @@ drawPoints = function(map) {
 
     labels.append("input")
       .attr('type', 'checkbox')
-      // .property('checked', function(d) {
-      //   return initialSelections === undefined || initialSelections.has(d.type)
-      // })
+      .property('checked', function(d) {
+        return true
+      })
       .attr("value", function(d) { return d.type; })
       .on("change", drawWithLoading);
 

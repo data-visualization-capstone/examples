@@ -1,42 +1,3 @@
-showHide = function(selector) {
-  d3.select(selector).select('.hide').on('click', function(){
-    d3.select(selector)
-      .classed('visible', false)
-      .classed('hidden', true);
-  });
-
-  d3.select(selector).select('.show').on('click', function(){
-    d3.select(selector)
-      .classed('visible', true)
-      .classed('hidden', false);
-  });
-}
-
-////////////////////////////////////////////
-// Functions for filtering points by date //
-////////////////////////////////////////////
-
-filter = function (month, day){
-  $("circle").each(function(){
-    var thisDate = $(this).attr("date").substring(0, 10).split("-"),
-        thisMonth = Number(thisDate[1]),
-        thisDay = Number(thisDate[2]);
-
-    if(thisMonth != month && thisDay != day){
-      $(this).parent("g").hide();
-    } else if($(this).parent("g").css("display") == "none"){
-      $(this).parent("g").show();
-    }
-  });
-}
-
-$("#dateFilter").click(function(){
-    filter($("#month").val(), $("#day").val());
-});
-
-clearFilter = function (){
-  $("circle").parent("g").show();
-}
 
 // Maps the input number to the output
 // color. Input between 0 and 100 maps
@@ -271,7 +232,8 @@ drawPoints = function(map) {
 
 // Format data into presentable format
 function formatData(data){
-  points = data.splice(5000, 10000)
+  // points = data.splice(5000, 10000)
+  points = _.sample(data, 2000)
   // points = data;
 
   points = _.map(points, function(point, key){

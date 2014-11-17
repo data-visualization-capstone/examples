@@ -2,7 +2,10 @@ body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
   font-size: 14px;
-  background-color: #999;
+  background-color: #000;
+  background-image: url(../img/loader.gif);
+  background-repeat: no-repeat;
+  background-position: center 150px;
 }
 
 p {

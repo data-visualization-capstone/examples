@@ -1,6 +1,7 @@
 /******************************
           Data.js 
  ******************************/
+ 
 // Convert Google Location Data's .kml (renamed .xml)
 // into a usable JSON format.
 function loadData(next) {

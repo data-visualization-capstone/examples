@@ -1,7 +1,7 @@
 
-//////////////////////////////////
-// Functions for drawing points //
-//////////////////////////////////
+/******************************
+         Graphing.js 
+ ******************************/
 
 drawPoints = function(map, data) {
   var pointTypes = d3.map(),

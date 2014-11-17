@@ -1,4 +1,8 @@
 
+/******************************
+         Coloring.js 
+ ******************************/
+
 // Maps the input number to the output
 // color. Input between 0 and 100 maps
 // to the range of red -> green

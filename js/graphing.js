@@ -48,7 +48,6 @@ drawPoints = function(map) {
       lastSelectedPoint;
 
   var drawPointTypeSelection = function() {
-    // showHide('#selections')
 
     labels = d3.select('#toggles').selectAll('input')
       .data(pointTypes.values())
@@ -57,7 +56,7 @@ drawPoints = function(map) {
     labels.append("input")
       .attr('type', 'checkbox')
       .property('checked', function(d) {
-        return true
+        return true;
       })
       .attr("value", function(d) { return d.type; })
       .on("change", drawWithLoading);
@@ -135,22 +134,23 @@ drawPoints = function(map) {
 
     var svgPoints = g.attr("class", "points")
       .selectAll("g")
-        .data(filteredPoints)
+      .data(filteredPoints)
       .enter().append("g")
-        .attr("class", "point")
-        .style("z-index", 999);
+      .attr("class", "point")
+      .style("z-index", 999);
 
     svgPoints.append("path")
       .attr("class", "point-cell")
-      // .on('click', selectPoint)
+      .on('click', function(d){ console.log(d) })
       .classed("selected", function(d) { return lastSelectedPoint == d} );
 
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style('fill', function(d) { return '#' + d.color } )
       .attr("date", function(d) { return d.date })
-      .attr("r", 2)
-      .attr("pointer-events", "all");
+      .attr("r", 5)
+      .attr("pointer-events", "all")
+      .attr("opacity", .1);
 
     svgPoints.each(function(){
       if($(this).next().length == 1){
@@ -216,7 +216,7 @@ drawPoints = function(map) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      points = data.slice(0, 10000);
+      points = data.slice(0, 30000);
       // points = data;
 
       console.log(data.length)

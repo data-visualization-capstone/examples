@@ -38,6 +38,30 @@ clearFilter = function (){
   $("circle").parent("g").show();
 }
 
+// Maps the input number to the output
+// color. Input between 0 and 100 maps
+// to the range of red -> green
+function getColor(i){
+
+  if (i < 0){
+    i = 0;
+  } else if (i > 1){    
+    i = 1;
+  }
+
+  var r = Math.floor(255 * i);
+  var g = Math.floor(255 - 255 * i);
+  var b = 0;
+
+  return componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+// http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
 //////////////////////////////////
 // Functions for drawing points //
 //////////////////////////////////
@@ -139,17 +163,20 @@ drawPoints = function(map) {
       .attr("class", "point")
       .style("z-index", 999);
 
+    /*
     svgPoints.append("path")
       .attr("class", "point-cell")
       .on('click', function(d){ console.log(d) })
       .classed("selected", function(d) { return lastSelectedPoint == d} );
+
+    */
 
     // Add circles for each point
     svgPoints.append("circle")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style('fill', function(d) { return '#' + d.color } )
       .attr("date", function(d) { return d.date })
-      .attr("r", 5)
+      .attr("r", 7)
       .attr("pointer-events", "all")
       .attr("opacity", .1);
 
@@ -191,7 +218,7 @@ drawPoints = function(map) {
         lines = lines.concat(lines2);
         
         for(var x in lines){
-          lines[x].css("opacity", .4);
+          lines[x].css("opacity", 0); // Set HOVER .4
         }
       },
 
@@ -227,13 +254,24 @@ drawPoints = function(map) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      // points = data;
-      points = data.slice(0, 30000);
+      points = data;
+      points = _.sample(data, 200000);
+      // data.slice(0, 20000);
 
       points = _.map(points, function(point, key){
-        
+
+
+        // Grab hours from date (0-24)
+        var hours = moment(point.date, moment.ISO_8601).hours();
+        // Math.abs(hours - 12) / 12
+
+//        console.log();
+
+        // var color = getColor(hours / 24)
+        var color = getColor(Math.abs(hours - 12) / 12);
+
         var i = {
-          color: "609128",
+          color: color,
           id: key,
           date: point.date,
           latitude: point.location[1],

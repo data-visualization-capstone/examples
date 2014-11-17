@@ -246,8 +246,8 @@ drawPoints = function(map, url, initialSelections) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      // points = data.slice(0, 1000);
-      points = data;
+      points = data.slice(0, 10000);
+      //points = data;
       
       points = _.map(points, function(point, key){
         

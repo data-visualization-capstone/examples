@@ -46,75 +46,14 @@
 
     loadData(function(data){
       map = L.mapbox.map('map', 'zetter.i73ka9hn').fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
+      
+      // Format data. Provide subset & type of graph 
+      var data = formatData(data.splice(data.length - 10000, data.length), "time");
 
-      drawPoints(map, formatData(data));
+      // Render points on graph
+      drawPoints(map, data);
     })
 
-
-    // Format data into presentable format
-    function formatData(data){
-
-        points = data.splice(data.length - 10000, data.length)
-        // points = _.sample(data, 2000)
-        // points = data;
-
-        points = _.map(points, function(point, key){
-
-          // Grab hours from date (0-24)
-          var hours = moment(point.date, moment.ISO_8601).hours();
-          
-          // Time from Noon
-          var color = getColor(Math.abs(hours - 12) / 12);
-
-          var i = {
-            color: color,
-            id: key,
-            date: point.date,
-            latitude: point.location[1],
-            longitude: point.location[0],
-            type: "Alex",
-          }
-
-          return i;
-        })
-
-        return points;
-      };
-  
-      
-      // Time difference between current and previous point
-      // _.each(points, function(point, key){
-      //   if (key == 0){
-      //     return;
-      //   }
-
-      //   var a = moment(point.date, moment.ISO_8601);
-      //   var b = moment(points[key - 1].date, moment.ISO_8601);
-
-      //   var difference = a.diff(b);
-
-      //   console.log(difference);
-
-      //   // red = 0: low difference
-      //   // green = 1: high difference
-
-      //   var color = getColor(difference / 100000);
-
-      //   var i = {
-      //     color: color,
-      //     id: key,
-      //     date: point.date,
-      //     latitude: point.location[1],
-      //     longitude: point.location[0],
-      //     name: key,
-      //     type: "Alex",
-      //     url: "..."
-      //   }
-
-      //   points[key] = i;
-      // })
-
-      
 
     var showConnections = false;
 

@@ -1,3 +1,8 @@
+
+/******************************
+         Filtering.js 
+ ******************************/
+
 showHide = function(selector) {
   d3.select(selector).select('.hide').on('click', function(){
     d3.select(selector)
@@ -63,7 +68,9 @@ clearFilter = function (){
   $("#day").val("day");
 }
 
-// Watchers
+/******************************
+         Watchers
+ ******************************/
 
 $("#month").change(function(){
   makeDays($("#month").val());

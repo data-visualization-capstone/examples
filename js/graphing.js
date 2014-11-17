@@ -1,5 +1,4 @@
 
-
 //////////////////////////////////
 // Functions for drawing points //
 //////////////////////////////////
@@ -45,7 +44,7 @@ drawPoints = function(map, data) {
       return currentSelectedTypes.has(item.type);
     });
   }
-
+  
   var drawWithLoading = function(e){
     d3.select('#loading').classed('visible', true);
     if (e && e.type == 'viewreset') {
@@ -53,9 +52,16 @@ drawPoints = function(map, data) {
     }
     setTimeout(function(){
       draw();
+
+      // Add Date Filter
+      if($("#month").val() != "All Months" && $("#day").val() != "All Days"){
+        filter($("#month").val(), $("#day").val());
+      } 
+
       d3.select('#loading').classed('visible', false);
     }, 0);
   }
+
 
   var draw = function() {
     d3.select('#overlay').remove();
@@ -135,48 +141,53 @@ drawPoints = function(map, data) {
     });
     
 
-    // Add tracking lines
-    // 5 in each direction
-    $("g").each(function(){
-      $(this).hover(function(){
+    addTrackingLines();
 
-        var lines = [$(this).children("line"), $(this).next().children("line")],
-            lines2 = [$(this).prev().children("line")];
+    // Provides a tracing highlight of user
+    // activiity for sequential points on hover
+    function addTrackingLines(){
+      
+      $("g").each(function(){
+        $(this).hover(function(){
 
-        for(i=1; i < 5; i++){
-          lines.push(lines[i].parent().next().children("line"));
-        }
+          var lines = [$(this).children("line"), $(this).next().children("line")],
+              lines2 = [$(this).prev().children("line")];
 
-        for(i=0; i < 4; i++){
-          lines2.push(lines2[i].parent().prev().children("line"));
-        }
+          for(i=1; i < 5; i++){
+            lines.push(lines[i].parent().next().children("line"));
+          }
 
-        lines = lines.concat(lines2);
-        
-        for(var x in lines){
-          lines[x].css("opacity", .4); // Set HOVER .4
-        }
-      },
+          for(i=0; i < 4; i++){
+            lines2.push(lines2[i].parent().prev().children("line"));
+          }
 
-      function(){
-        var lines = [$(this).children("line"), $(this).next().children("line")],
-            lines2 = [$(this).prev().children("line")];
-        
-        for(i=1; i < 5; i++){
-          lines.push(lines[i].parent().next().children("line"));
-        }
+          lines = lines.concat(lines2);
+          
+          for(var x in lines){
+            lines[x].css("opacity", .4); // Set HOVER .4
+          }
+        },
 
-        for(i=0; i < 4; i++){
-          lines2.push(lines2[i].parent().prev().children("line"));
-        }
+        function(){
+          var lines = [$(this).children("line"), $(this).next().children("line")],
+              lines2 = [$(this).prev().children("line")];
+          
+          for(i=1; i < 5; i++){
+            lines.push(lines[i].parent().next().children("line"));
+          }
 
-        lines = lines.concat(lines2); 
+          for(i=0; i < 4; i++){
+            lines2.push(lines2[i].parent().prev().children("line"));
+          }
 
-        for(var x in lines){
-          lines[x].css("opacity", 0);
-        }
+          lines = lines.concat(lines2); 
+
+          for(var x in lines){
+            lines[x].css("opacity", 0);
+          }
+        });
       });
-    });
+    }
     
   }
 

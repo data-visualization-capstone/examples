@@ -35,6 +35,7 @@ filter = function (month, day){
     }
   });
 }
+
 makeDays = function (month){
   var thirtyDay = [9, 4, 6, 11];
   for(i = 0; i < 3; i ++){
@@ -55,14 +56,20 @@ makeDays = function (month){
     }
   }
 }
-$("#month").change(function(){
-  makeDays($("#month").val());
-});
-$("#dateFilter").click(function(){
-    filter($("#month").val(), $("#day").val());
-  });
+
 clearFilter = function (){
   $("circle").parent("g").show();
   $("#month").val("month");
   $("#day").val("day");
 }
+
+// Watchers
+
+$("#month").change(function(){
+  makeDays($("#month").val());
+});
+
+$("#dateFilter").click(function(){
+  filter($("#month").val(), $("#day").val());
+});
+

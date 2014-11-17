@@ -254,34 +254,9 @@ drawPoints = function(map) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      points = data;
-      points = _.sample(data, 200000);
-      // data.slice(0, 20000);
-
-      points = _.map(points, function(point, key){
-
-
-        // Grab hours from date (0-24)
-        var hours = moment(point.date, moment.ISO_8601).hours();
-        // Math.abs(hours - 12) / 12
-
-//        console.log();
-
-        // var color = getColor(hours / 24)
-        var color = getColor(Math.abs(hours - 12) / 12);
-
-        var i = {
-          color: color,
-          id: key,
-          date: point.date,
-          latitude: point.location[1],
-          longitude: point.location[0],
-          name: key,
-          type: "Alex",
-          url: "..."
-        }
-        return i;
-      })
+      
+      // format data
+      points = formatData(data);
 
       points.forEach(function(point) {
         pointTypes.set(point.type, {type: point.type, color: point.color});
@@ -292,4 +267,67 @@ drawPoints = function(map) {
       
     });
   });
+}
+
+// Format data into presentable format
+function formatData(data){
+  points = data.splice(5000, 10000)
+  // points = data;
+
+  points = _.map(points, function(point, key){
+
+    // Grab hours from date (0-24)
+    var hours = moment(point.date, moment.ISO_8601).hours();
+    
+    // Time from Noon
+    var color = getColor(Math.abs(hours - 12) / 12);
+
+    var i = {
+      color: color,
+      id: key,
+      date: point.date,
+      latitude: point.location[1],
+      longitude: point.location[0],
+      name: key,
+      type: "Alex",
+      url: "..."
+    }
+    return i;
+  })
+  
+  // Time difference between current and previous point
+  // _.each(points, function(point, key){
+  //   if (key == 0){
+  //     return;
+  //   }
+
+  //   var a = moment(point.date, moment.ISO_8601);
+  //   var b = moment(points[key - 1].date, moment.ISO_8601);
+
+  //   var difference = a.diff(b);
+
+  //   console.log(difference);
+
+  //   // red = 0: low difference
+  //   // green = 1: high difference
+
+  //   var color = getColor(difference / 100000);
+
+  //   var i = {
+  //     color: color,
+  //     id: key,
+  //     date: point.date,
+  //     latitude: point.location[1],
+  //     longitude: point.location[0],
+  //     name: key,
+  //     type: "Alex",
+  //     url: "..."
+  //   }
+
+  //   points[key] = i;
+  // })
+
+  
+  return points;
+
 }

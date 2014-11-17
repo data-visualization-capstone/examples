@@ -9,18 +9,33 @@
 <body>
   <div id='map'></div>
   <div id='selections' class="selections">
+    <a href='#' class="show">Choose User</a>
     <div class='content'>
+      <a href='#' class="hide">Hide</a>
       <div id="toggles">
       </div>
-
-      <!-- Toggle Displayed Data -->
-      <a href="#" id="toggleConnections">Show Connections</a>
+      <a href="#" id="toggleConnections">Toggle Connections</a>
       
-      <!-- Filter by Date -->
       <div>
         <label>Filter By:</label>
-        <input id="month" type="text" value="month">
-        <input id="day" type="text" value="day">
+        <select id="month">
+          <option>All Months</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+        <select id="day">
+          <option>All Days</option>
+        </select>
         <div>
           <button id="dateFilter">Filter</button>
           <button onclick="clearFilter()">Clear Filter</button>

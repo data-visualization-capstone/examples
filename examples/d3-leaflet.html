@@ -18,8 +18,24 @@
       <a href="#" id="hideConn" style="display:none;">Hide Connections</a>
       <div>
         <label>Filter By:</label>
-        <input id="month" type="text" value="month">
-        <input id="day" type="text" value="day">
+        <select id="month">
+          <option>All Months</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+        <select id="day">
+          <option>All Days</option>
+        </select>
         <div>
           <button id="dateFilter">Filter</button>
           <button onclick="clearFilter()">Clear Filter</button>
@@ -30,7 +46,7 @@
   <div id='loading'>
   </div>
   <div id='selected'>
-    <h1>Explore supermarkets in the UK</h1>
+    <h1>Check out this kewl data, grl ;)</h1>
   </div>
   <div id='about'>
     <!-- <p class='content'>

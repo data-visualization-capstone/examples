@@ -16,6 +16,12 @@ showHide = function(selector) {
 // Functions for filtering points by date //
 ////////////////////////////////////////////
 
+// TODO: Make this function better 
+// - should not work if no points are displayed  
+// - should be able to display data for all days of selected month
+// - should store month and corresponding number as key-value pair
+//    september : 9, october : 10, etc. 
+
 filter = function (month, day){
   $("circle").each(function(){
     var thisDate = $(this).attr("date").substring(0, 10).split("-"),
@@ -29,20 +35,43 @@ filter = function (month, day){
     }
   });
 }
-
+makeDays = function (month){
+  var thirtyDay = [9, 4, 6, 11];
+  for(i = 0; i < 3; i ++){
+    if(Number(month) == thirtyDay[i]){
+      for(i = 1; i < 31; i++){
+        $("#day").append("<option>"+i+"</option>");
+      }
+    } 
+    else if(Number(month) != 2){
+      for(i = 1; i < 30; i++){
+        $("#day").append("<option>"+i+"</option>");
+      }
+    }
+    else{
+      for(i = 1; i < 29; i++){
+        $("#day").append("<option>"+i+"</option>");
+      } 
+    }
+  }
+}
+$("#month").change(function(){
+  makeDays($("#month").val());
+});
 $("#dateFilter").click(function(){
     filter($("#month").val(), $("#day").val());
-});
-
+  });
 clearFilter = function (){
   $("circle").parent("g").show();
+  $("#month").val("month");
+  $("#day").val("day");
 }
 
 //////////////////////////////////
 // Functions for drawing points //
 //////////////////////////////////
 
-drawPoints = function(map) {
+drawPoints = function(map, url, initialSelections) {
   var pointTypes = d3.map(),
       points = [],
       lastSelectedPoint;
@@ -56,9 +85,9 @@ drawPoints = function(map) {
 
     labels.append("input")
       .attr('type', 'checkbox')
-      // .property('checked', function(d) {
-      //   return initialSelections === undefined || initialSelections.has(d.type)
-      // })
+      .property('checked', function(d) {
+        return initialSelections === undefined || initialSelections.has(d.type)
+      })
       .attr("value", function(d) { return d.type; })
       .on("change", drawWithLoading);
 
@@ -92,13 +121,16 @@ drawPoints = function(map) {
     }
     setTimeout(function(){
       draw();
+
+      if($("#month").val() != "All Months" && $("#day").val() != "All Days"){
+        filter($("#month").val(), $("#day").val());
+      }      
       d3.select('#loading').classed('visible', false);
     }, 0);
   }
 
   var draw = function() {
     d3.select('#overlay').remove();
-
     var bounds = map.getBounds(),
         topLeft = map.latLngToLayerPoint(bounds.getNorthWest()),
         bottomRight = map.latLngToLayerPoint(bounds.getSouthEast()),
@@ -153,6 +185,7 @@ drawPoints = function(map) {
       .attr("pointer-events", "all");
 
     svgPoints.each(function(){
+
       if($(this).next().length == 1){
         var this_transform = $(this).children("circle").attr("transform"),
             next_transform = $(this).next().children("circle").attr("transform"),
@@ -170,8 +203,6 @@ drawPoints = function(map) {
       }
     });
 
-    // Add tracking lines
-    
     $("g").each(function(){
       $(this).hover(function(){
         var lines = [$(this).children("line"), $(this).next().children("line")],
@@ -196,8 +227,7 @@ drawPoints = function(map) {
         for(i=0; i < 4; i++){
           lines2.push(lines2[i].parent().prev().children("line"));
         }
-        lines = lines.concat(lines2); 
-        console.log(lines.length);  
+        lines = lines.concat(lines2);  
         for(var x in lines){
           lines[x].css("opacity", 0);
         }
@@ -216,11 +246,9 @@ drawPoints = function(map) {
   map.on('ready', function() {
 
     fetchData(function(data){
-      points = data.slice(0, 10000);
-      // points = data;
-
-      console.log(data.length)
-
+      // points = data.slice(0, 1000);
+      points = data;
+      
       points = _.map(points, function(point, key){
         
         var i = {

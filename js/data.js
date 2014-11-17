@@ -57,8 +57,8 @@ function formatData(data, style) {
 
   // Color-code points by time proximity
   // to noon (middle of day);
-  function formatDataByTimeOfDay(data) {
-    return _.map(data, function(point, key) {
+  function formatDataByTimeOfDay(points) {
+    return _.map(points, function(point, key) {
 
       // Hour at which tracking event occured (0 -> 24)
       var hours = moment(point.date, moment.ISO_8601).hours();
@@ -80,9 +80,10 @@ function formatData(data, style) {
     })
   };
 
-  function formatDataByTimeDifference() {
+  function formatDataByTimeDifference(points) {
+    
     // Time difference between current and previous point
-    _.each(points, function(point, key) {
+    return _.each(points, function(point, key) {
       if (key == 0) {
         return;
       }
@@ -92,25 +93,23 @@ function formatData(data, style) {
 
       var difference = a.diff(b);
 
-      console.log(difference);
+      // Low Time Difference:
+      // More recorded points -> Green
+      
+      // High Time Difference
+      // Fewer recorded points -> Red
 
-      // red = 0: low difference
-      // green = 1: high difference
+      // Map number to color. 0 = red, 1 = green
+      var color = getColor(difference / 160000);
 
-      var color = getColor(difference / 100000);
-
-      var i = {
+      points[key] = {
         color: color,
         id: key,
         date: point.date,
         latitude: point.location[1],
         longitude: point.location[0],
-        name: key,
         type: "Alex",
-        url: "..."
-      }
-
-      points[key] = i;
+      };
     })
   }
 }

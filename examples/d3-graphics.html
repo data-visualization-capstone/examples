@@ -61,11 +61,11 @@
   <script>
 
     loadData(function(data){
-      map = L.mapbox.map('map', 'zetter.i73ka9hn').fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
+      map = L.mapbox.map('map', 'alexjohnson505.k2pknn10').fitBounds([[42.329077, -71.108871], [42.374200, -71.032072]]);
       
       // Format data. Provide subset & type of graph 
-      // var subset = data.splice(data.length - 10000, data.length);
-      var subset = _.sample(data, 20000);
+      var subset = data.splice(data.length - 10000, data.length);
+      // var subset = _.sample(data, 20000);
 
       var data = formatData(subset, "time");
 
